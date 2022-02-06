@@ -277,7 +277,7 @@ def pregunta_09():
             key = pair[:3]
             keys[key] += 1
 
-    return sorted(keys.items())
+    return dict(sorted(keys.items()))
 
 
 def pregunta_10():
