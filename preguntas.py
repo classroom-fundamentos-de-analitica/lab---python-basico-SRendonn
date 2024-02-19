@@ -11,6 +11,13 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+from collections import defaultdict
+
+
+with open('./data.csv', 'r') as file:
+    data = [x.replace('\n', '') for x in file.readlines()]
+
+rows = [d.split('\t') for d in data]
 
 
 def pregunta_01():
@@ -21,7 +28,11 @@ def pregunta_01():
     214
 
     """
-    return
+    suma = 0
+    for row in rows:
+        suma += int(row[1])
+
+    return suma
 
 
 def pregunta_02():
@@ -39,7 +50,12 @@ def pregunta_02():
     ]
 
     """
-    return
+    letters = defaultdict(lambda: 0)
+
+    for row in rows:
+        letters[row[0]] += 1
+
+    return sorted(list(letters.items()))
 
 
 def pregunta_03():
@@ -57,7 +73,12 @@ def pregunta_03():
     ]
 
     """
-    return
+    letters = defaultdict(lambda: 0)
+
+    for row in rows:
+        letters[row[0]] += int(row[1])
+
+    return sorted(list(letters.items()))
 
 
 def pregunta_04():
@@ -82,7 +103,13 @@ def pregunta_04():
     ]
 
     """
-    return
+
+    months = defaultdict(lambda: 0)
+
+    for row in rows:
+        months[row[2][5:7]] += 1
+
+    return sorted(list(months.items()))
 
 
 def pregunta_05():
@@ -100,7 +127,21 @@ def pregunta_05():
     ]
 
     """
-    return
+
+    min_values = defaultdict(lambda: 10)
+    max_values = defaultdict(lambda: 0)
+
+    for row in rows:
+        if min_values[row[0]] > int(row[1]):
+            min_values[row[0]] = int(row[1])
+        if max_values[row[0]] < int(row[1]):
+            max_values[row[0]] = int(row[1])
+
+    res = []
+
+    for key in min_values.keys():
+        res.append((key, max_values[key], min_values[key]))
+    return sorted(res)
 
 
 def pregunta_06():
@@ -125,7 +166,24 @@ def pregunta_06():
     ]
 
     """
-    return
+
+    min_values = defaultdict(lambda: 50)
+    max_values = defaultdict(lambda: 0)
+
+    for row in rows:
+        pairs = row[4].split(',')
+        for pair in pairs:
+            key, value = pair.split(':')
+            if min_values[key] > int(value):
+                min_values[key] = int(value)
+            if max_values[key] < int(value):
+                max_values[key] = int(value)
+    res = []
+
+    for key in min_values.keys():
+        res.append((key, min_values[key], max_values[key]))
+
+    return sorted(res)
 
 
 def pregunta_07():
@@ -149,7 +207,12 @@ def pregunta_07():
     ]
 
     """
-    return
+    letters = defaultdict(list)
+
+    for row in rows:
+        letters[int(row[1])].append(row[0])
+
+    return sorted(list(letters.items()))
 
 
 def pregunta_08():
@@ -174,7 +237,15 @@ def pregunta_08():
     ]
 
     """
-    return
+    letters = defaultdict(set)
+
+    for row in rows:
+        letters[int(row[1])].add(row[0])
+
+    for i in letters.keys():
+        letters[i] = list(sorted(letters[i]))
+
+    return sorted(list(letters.items()))
 
 
 def pregunta_09():
@@ -197,7 +268,16 @@ def pregunta_09():
     }
 
     """
-    return
+
+    keys = defaultdict(lambda: 0)
+
+    for row in rows:
+        pairs = row[4].split(',')
+        for pair in pairs:
+            key = pair[:3]
+            keys[key] += 1
+
+    return dict(sorted(keys.items()))
 
 
 def pregunta_10():
@@ -218,7 +298,13 @@ def pregunta_10():
 
 
     """
-    return
+
+    res = []
+
+    for row in rows:
+        res.append((row[0], len(row[3].split(',')), len(row[4].split(','))))
+
+    return res
 
 
 def pregunta_11():
@@ -239,7 +325,14 @@ def pregunta_11():
 
 
     """
-    return
+    letters = defaultdict(lambda: 0)
+
+    for row in rows:
+        keys = row[3].split(',')
+        for key in keys:
+            letters[key] += int(row[1])
+
+    return dict(sorted(letters.items()))
 
 
 def pregunta_12():
@@ -257,4 +350,10 @@ def pregunta_12():
     }
 
     """
-    return
+    res = defaultdict(lambda: 0)
+
+    for row in rows:
+        suma = sum([int(x[4:]) for x in row[4].split(',')])
+        res[row[0]] += suma
+
+    return dict(sorted(res.items()))
